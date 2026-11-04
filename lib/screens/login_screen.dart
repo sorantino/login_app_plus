@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart'; // Importez AuthService
+import '../widgets/loading_button.dart';
+import '../widgets/responsive_container.dart';
 import 'profile_screen.dart'; // Importez ProfileScreen
 
 class LoginScreen extends StatefulWidget {
@@ -76,14 +78,37 @@ class _LoginScreenState extends State<LoginScreen> {
         title: Text(widget.title),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: SingleChildScrollView( // Ajout de SingleChildScrollView pour la réactivité
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
+      body: ResponsiveContainer(
+        child: TweenAnimationBuilder<double>(
+          tween: Tween(begin: 0.0, end: 1.0),
+          duration: const Duration(milliseconds: 600),
+          builder: (context, value, child) =>
+              Opacity(opacity: value, child: child),
           child: Form(
             key: _formKey, // Assignation de la clé au formulaire
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                Image.asset(
+                  'assets/images/logo.png',
+                  height: 120,
+                  errorBuilder: (context, error, stackTrace) => Icon(
+                    Icons.lock_person,
+                    size: 96,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                Text(
+                  'Bienvenue',
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                const SizedBox(height: 4.0),
+                Text(
+                  'Connectez-vous pour continuer',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                const SizedBox(height: 32.0),
                 // Champ Email
                 TextFormField(
                   controller: _emailController,
@@ -120,19 +145,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     if (value == null || value.isEmpty) {
                       return 'Veuillez entrer votre mot de passe';
                     }
-                    if (value.length < 6) {
-                      return 'Le mot de passe doit contenir au moins 6 caractères';
-                    }
                     return null;
                   },
                 ),
                 const SizedBox(height: 24.0),
                 // Bouton de Connexion ou Indicateur de Chargement
-                _isLoading
-                    ? const CircularProgressIndicator()
-                    : ElevatedButton(
+                LoadingButton(
+                  isLoading: _isLoading,
                   onPressed: _login,
-                  child: const Text('Se connecter'),
+                  label: 'Se connecter',
                 ),
               ],
             ),

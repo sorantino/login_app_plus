@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
+import 'package:http/http.dart' as http;
 
 class AuthService {
   // Méthode de hachage des mots de passe
@@ -11,38 +12,24 @@ class AuthService {
     return digest.toString(); // Retourne le hachage en chaîne hexadécimale
   }
 
-  // Tableau associatif local des utilisateurs avec mots de passe hachés
-  final Map<String, Map<String, dynamic>> _users = {
-    'jean@example.com': {
-      'password': '', // Sera initialisé dans le constructeur
-      'firstName': 'Jean',
-      'lastName': 'DUPONT',
-      'role': 'User'
-    },
-    'julie@example.com': {
-      'password': '',
-      'firstName': 'Julie',
-      'lastName': 'MARTIN',
-      'role': 'Admin',
-    },
-  };
-
-  AuthService() {
-    // Initialiser les mots de passe hachés
-    _users['jean@example.com']!['password'] = hashPassword('userpass');
-    _users['julie@example.com']!['password'] = hashPassword('adminpass');
-  }
-
-  // Méthode de connexion
   Future<Map<String, dynamic>?> login(String email, String password) async {
-    // Simule un délai pour imiter un appel réseau
-    await Future.delayed(const Duration(seconds: 2));
+    try {
+      final response = await http.post(
+        Uri.parse('https://temp.itds.fr/login_tst_local.php'),
+        body: {'email': email, 'password': password},
+      );
 
-    if (_users.containsKey(email)) {
-      String hashedPassword = hashPassword(password);
-      if (_users[email]!['password'] == hashedPassword) {
-        return _users[email];
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200 && data['status'] == 200) {
+        return {
+          'firstName': data['firstName'],
+          'lastName': data['lastName'],
+          'role': data['role'].toString(),
+        };
       }
+    } catch (e) {
+      return null;
     }
     return null;
   }
