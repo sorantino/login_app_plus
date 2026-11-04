@@ -15,8 +15,21 @@ class LoginApp extends StatelessWidget {
     return MaterialApp(
       title: 'Application de Connexion',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF3D5AFE)),
         useMaterial3: true,
+        inputDecorationTheme: const InputDecorationTheme(
+          filled: true,
+          border: OutlineInputBorder(),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size.fromHeight(50),
+            textStyle: const TextStyle(fontSize: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
       ),
       home: const LoginScreen(title: 'Page de Connexion'),
       debugShowCheckedModeBanner: false,

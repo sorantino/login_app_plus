@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 
+import '../widgets/responsive_container.dart';
+
 class ProfileScreen extends StatelessWidget {
   final String email;
   final String firstName;
@@ -31,33 +33,44 @@ class ProfileScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: ResponsiveContainer(
         child: Column(
           children: <Widget>[
-            // Affichage des informations du profil
-            ListTile(
-              leading: const Icon(Icons.person),
-              title: const Text('Nom'),
-              subtitle: Text('$firstName $lastName'),
+            CircleAvatar(
+              radius: 48,
+              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+              child: const Icon(Icons.person, size: 48),
             ),
-            ListTile(
-              leading: const Icon(Icons.email),
-              title: const Text('Email'),
-              subtitle: Text(email),
-            ),
-            ListTile(
-              leading: const Icon(Icons.security),
-              title: const Text('Rôle'),
-              subtitle: Text(role),
+            const SizedBox(height: 16.0),
+            Text(
+              '$firstName $lastName',
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: 24.0),
-            ElevatedButton(
+            Card(
+              child: Column(
+                children: <Widget>[
+                  ListTile(
+                    leading: const Icon(Icons.email),
+                    title: const Text('Email'),
+                    subtitle: Text(email),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.security),
+                    title: const Text('Rôle'),
+                    subtitle: Text(role),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24.0),
+            ElevatedButton.icon(
               onPressed: () {
                 // Déconnexion en retournant à l'écran de connexion
                 Navigator.pop(context);
               },
-              child: const Text('Se déconnecter'),
+              icon: const Icon(Icons.logout),
+              label: const Text('Se déconnecter'),
             ),
           ],
         ),
