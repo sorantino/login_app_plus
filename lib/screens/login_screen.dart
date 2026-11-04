@@ -89,16 +89,19 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Image.asset(
-                  'assets/images/logo.png',
-                  height: 120,
-                  errorBuilder: (context, error, stackTrace) => Icon(
-                    Icons.lock_person,
-                    size: 96,
-                    color: Theme.of(context).colorScheme.primary,
+                if (MediaQuery.of(context).orientation ==
+                    Orientation.portrait) ...[
+                  Image.asset(
+                    'assets/images/logo.png',
+                    height: 120,
+                    errorBuilder: (context, error, stackTrace) => Icon(
+                      Icons.lock_person,
+                      size: 96,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16.0),
+                  const SizedBox(height: 16.0),
+                ],
                 Text(
                   'Bienvenue',
                   style: Theme.of(context).textTheme.headlineSmall,

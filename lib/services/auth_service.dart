@@ -15,7 +15,7 @@ class AuthService {
   Future<Map<String, dynamic>?> login(String email, String password) async {
     try {
       final response = await http.post(
-        Uri.parse('https://temp.itds.fr/login_tst_local.php'),
+        Uri.parse('http://10.0.2.2:8080/login'),
         body: {'email': email, 'password': password},
       );
 
